@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .forms import TutorialForm
 # Create your views here.
 
 def index(request) :
@@ -34,3 +35,31 @@ def next(request):
         'goto': 'index'
     }
     return render(request, 'hello/index.html', params)
+
+def form(request):
+    params = {
+        'title':'Form',
+        'msg' : 'メッセージを入力してください。',
+    }
+    return render(request, 'hello/form.html', params)
+
+def form_result(request):
+    msg = request.POST['msg']
+    params = {
+        'title': 'Form',
+        'msg' : msg,
+        }
+    return render(request, 'hello/form.html', params)
+
+def new_form(request):
+    params = {
+        'title':'New Form',
+        'result':'formを入力してください',
+        'form' : TutorialForm()
+        }
+    if (request.method == 'POST'):
+        params['result'] = '{}さん{}歳のメッセージ:{}'.format(
+            request.POST['name'],request.POST['age'],request.POST['message']
+        )
+        params['form'] = TutorialForm(request.POST)
+    return render(request, 'hello/new_form.html',params)

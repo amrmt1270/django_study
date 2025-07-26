@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <p>{{msg}}</p>
+    <form action = "{% url 'form_result'%}" method ='POST'>
+        {% csrf_token %}
+        <input id = 'msg' name = 'msg' type = 'text'>
+        <input type = 'submit' value = 'click'>
+    </form>
+</body>
+</html>
