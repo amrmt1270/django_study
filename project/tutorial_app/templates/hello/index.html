@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello</title>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <p>{{msg}}</p>
+    <h1>if と for の埋め込み</h1>
+    <h3>for 文: {{numbers}}</h3>
+    {% for number in numbers %}
+        <p>{{ number }}</p>
+    {% endfor %}
+
+    <h3>for 文と if 文の組み合わせ: {{items}}</h3>
+    {% for item in items %}
+        {% if item == 'apple' %}
+            <p>果物:{{ item }}</p>
+        {% else %}
+            <p>野菜:{{item}}</p>
+        {% endif %}
+    {% endfor %}
+    <a href = '{% url goto %}'>{{goto}}<br></a> 
+</body>
+</html>
