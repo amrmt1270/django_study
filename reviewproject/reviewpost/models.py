@@ -6,4 +6,5 @@ class ReviewModel(models.Model):
     title = models.CharField(max_length=100)
     text = models.TextField()
     useful_num = models.IntegerField(null = True, blank = True, default = 0)
+    project_image = models.ImageField(upload_to = '', null =True, blank = True)
 
