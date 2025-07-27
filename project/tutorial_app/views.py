@@ -53,13 +53,12 @@ def form_result(request):
 
 def new_form(request):
     params = {
-        'title':'New Form',
-        'result':'formを入力してください',
+        'title':'BMI計算機',
         'form' : TutorialForm()
         }
     if (request.method == 'POST'):
-        params['result'] = '{}さん{}歳のメッセージ:{}'.format(
-            request.POST['name'],request.POST['age'],request.POST['message']
-        )
+        h,w = float(request.POST['height']), float(request.POST['weight'])
+        bmi = w /(h/100)**2
+        params['bmi'] = bmi
         params['form'] = TutorialForm(request.POST)
     return render(request, 'hello/new_form.html',params)
