@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+<form action = '' method = 'POST'>{% csrf_token %}
+    <input type = 'submit' value = 'ブログを削除する'>
+</form>
+{% endblock content %}
