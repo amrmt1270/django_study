@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from .models import ReviewModel
 
 # Create your views here.
 def signupview(request):
@@ -22,9 +23,16 @@ def loginview(request):
         user = authenticate(request, username = username, password = password)
         if user is not None:
             login(request, user)
-            print('ログイン成功です！')
+            return redirect('list')
         else:
-            print('User が存在しません')
-        return render(request, 'login.html', {})
+            return redirect('login')
     else:
         return render(request, 'login.html', {})
+    
+def listview(request):
+    object_list = ReviewModel.objects.all()
+    return render(request, 'list.html', {'object_list' : object_list})
+
+def detailview(request, pk):
+    object = ReviewModel.objects.get(pk = pk)
+    return render(request, 'detail.html', {'object' : object})

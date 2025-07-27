@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+    <div class="card" style="width: 18rem;">
+        <h5 class = 'card-header'>{{ object.title }} </h5>
+        <div class="card-body">
+            <h5 class="card-title">投稿者 :{{ object.author }}</h5>
+            <h6 class="card-content">レビュー内容:{{ object.text }}</h6>
+            <h6 class="card-title">レビューが参考になった人:{{ object.useful_num }}人</h6>
+            <a href="{% url 'list'  %}" class="btn btn-primary">一覧に戻る</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
