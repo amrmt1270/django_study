@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Djangoマニュアル</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.7;
+            margin: 2rem;
+            background-color: #f7f9fb;
+            color: #333;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 0.3em;
+        }
+        code {
+            background-color: #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        pre {
+            background: #e8e8e8;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        section {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Djangoマニュアル</h1>
+
+    <section>
+        <h2>第1章 Djangoとは</h2>
+        <p>DjangoはPythonで作られたWebフレームワークで、MTV（Model-Template-View）アーキテクチャを採用しています。高速開発・管理画面・セキュリティ機能などが特徴です。</p>
+    </section>
+
+    <section>
+        <h2>第2章 開発環境の準備</h2>
+        <ul>
+            <li>Pythonのインストール</li>
+            <li>仮想環境の作成: <code>python -m venv env</code></li>
+            <li>Djangoのインストール: <code>pip install django</code></li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>第3章 プロジェクトとアプリの作成</h2>
+        <pre><code>django-admin startproject myproject 
+cd myproject
+python manage.py startapp myapp</code></pre>
+        <p>myproject（プロジェクト）内にmyapp（アプリ）を作成。</p>
+    </section>
+
+    <section>
+        <h2>第4章 settings.pyの設定</h2>
+        <ul>
+            <li><code>INSTALLED_APPS</code> にアプリ名を追加</li>
+            <li><code>TEMPLATES</code>, <code>DATABASES</code> の確認</li>
+            <li>開発サーバー起動: <code>python manage.py runserver</code></li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>第5章 モデルの作成</h2>
+        <pre><code>class Book(models.Model):
+    title = models.CharField(max_length=100)
+    author = models.CharField(max_length=50)</code></pre>
+        <ul>
+            <li><code>python manage.py makemigrations</code></li>
+            <li><code>python manage.py migrate</code></li>
+            <li><code>admin.site.register()</code> で管理画面に表示</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>第6章 ビューの作成</h2>
+        <pre><code>from django.shortcuts import render
+def home(request):
+    return render(request, 'home.html')</code></pre>
+        <p>関数ベースビュー(FBV)とクラスベースビュー(CBV)が利用可能です。</p>
+    </section>
+
+    <section>
+        <h2>第7章 URLルーティング</h2>
+        <pre><code>from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+]</code></pre>
+        <p>プロジェクトのurls.pyでアプリのurls.pyを<code>include()</code>で取り込む。</p>
+    </section>
+
+    <section>
+        <h2>第8章 テンプレートの使い方</h2>
+        <pre><code>&lt;h1&gt;{{ title }}&lt;/h1&gt;
+{% if user %}
+  &lt;p&gt;ようこそ {{ user.username }} さん&lt;/p&gt;
+{% endif %}</code></pre>
+        <p>テンプレートの共通化には<code>{% extends 'base.html' %}</code>を使用。</p>
+    </section>
+
+    <section>
+        <h2>第9章 フォームの作成</h2>
+        <pre><code>from django import forms
+class ContactForm(forms.Form):
+    name = forms.CharField()
+    email = forms.EmailField()</code></pre>
+        <p><code>request.POST</code> からデータを受け取ってバリデーションできます。</p>
+    </section>
+
+    <section>
+        <h2>第10章 クラスベースビューの活用</h2>
+        <pre><code>from django.views.generic import ListView
+from .models import Book
+
+class BookListView(ListView):
+    model = Book
+    template_name = 'book_list.html'</code></pre>
+        <p><code>ListView</code>, <code>DetailView</code>, <code>CreateView</code> などが利用可能です。</p>
+    </section>
+
+    <section>
+        <h2>第11章 クエリセットとデータベース操作</h2>
+        <ul>
+            <li><code>Book.objects.all()</code></li>
+            <li><code>Book.objects.filter(author='山田')</code></li>
+            <li>外部キーやリレーションもサポート</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>第12章 認証機能の追加</h2>
+        <ul>
+            <li><code>django.contrib.auth</code> を使ったユーザー管理</li>
+            <li>ログイン処理：<code>from django.contrib.auth import login</code></li>
+            <li>ログアウト処理、ログイン制限（<code>@login_required</code>）</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>第13章 デプロイ方法（任意）</h2>
+        <ul>
+            <li><code>ALLOWED_HOSTS</code> の設定</li>
+            <li><code>python manage.py collectstatic</code></li>
+            <li>Heroku / Render / VPS などで公開可能</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>第14章 よく使うTips & エラー対処</h2>
+        <ul>
+            <li><code>python manage.py shell</code> でデバッグ</li>
+            <li>マイグレーションが反映されない → モデル変更後に再度 <code>makemigrations</code> 必要</li>
+            <li>テンプレートが読み込まれない → <code>TEMPLATES['DIRS']</code> を確認</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>終わりに</h2>
+        <p>DjangoはとてもパワフルなWebフレームワークです。このマニュアルを活用して、自分のWebアプリケーションを構築してみましょう。</p>
+    </section>
+
+</body>
+</html>
