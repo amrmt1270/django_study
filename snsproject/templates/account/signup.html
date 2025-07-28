@@ -1,6 +1,9 @@
-<h1></h1>
+{% extends 'account/base.html' %}
+{%block content %}
+<h1>登録フォーム</h1>
 <form method = 'post'>
     {% csrf_token %}
     {{form.as_p}}
     <button type = 'submit'>登録する</button>
 </form>
+{%endblock%}
