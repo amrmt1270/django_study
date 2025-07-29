@@ -134,3 +134,9 @@ MESSAGE_TAGS ={
     messages.SUCCESS: 'alert alert-success',
     messages.INFO : 'alert alert-info'
 }
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = '管理用メールアドレスp'
+EMAIL_HOST_PASSWORD = '管理用パスワード'
+EMAIL_PORT = 587
+Email_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
