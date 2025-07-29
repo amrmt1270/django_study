@@ -1,32 +1,73 @@
 {% extends 'post/base.html' %}
 {% block content %}
-<div class = 'container'>
+<div class="container">
     <h1>ホーム</h1>
-    {% if user.is_authenticated %}
-    <p>ユーザー名: {{ user.username }} さん</p>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">ログアウト</button>
-    </form>
 
+    {% if user.is_authenticated %}
+        <p>ユーザー名: {{ user.username }} さん</p>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">ログアウト</button>
+        </form>
     {% else %}
-    <p>ログインしていません</p>
-    <a href="{% url 'login' %}">ログイン</a>
+        <p>ログインしていません</p>
+        <a href="{% url 'login' %}">ログイン</a>
     {% endif %}
-        {% if messages %}
-        <ul class = 'list-unstyled'>
-            {% for message in messages%}
-                <li {% if message.tags %} class = "{{message.tags}}" {% endif %}>{{message}}</li>
+
+    {% if messages %}
+        <ul class="list-unstyled">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
+
     <h2>投稿一覧</h2>
     {% for item in object_list %}
-    <div class = 'card mb-3'>
-        <h5 class = 'card-title'>{{item.owner}}<h5>
-        <p class = 'catd-text'>{{item.content}}</p>
-        <p class = 'card-text text-right'>{{ item.created_at }}</p>
-    </div>
+        <div class="card mb-3">
+            <h5 class="card-title">{{ item.owner }}</h5>
+            <p class="card-text">{{ item.content }}</p>
+            <a href = post/{{item.pk}} class = 'btn btn-primary'>詳細へ</a>
+            <p class="card-text text-end">{{ item.created_at }}</p>
+        </div>
+    {% empty %}
+        <p>投稿はまだありません。</p>
     {% endfor %}
 </div>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if object_list.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ object_list.previous_page_number }}">前</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">前</span>
+            </li>
+        {% endif %}
+
+        {% for link_page in object_list.paginator.page_range %}
+            {% if link_page == object_list.number %}
+                <li class="page-item active">
+                    <span class="page-link">{{ link_page }}</span>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ link_page }}">{{ link_page }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if object_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ object_list.next_page_number }}">次</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">次</span>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
 {% endblock %}
