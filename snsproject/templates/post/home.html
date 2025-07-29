@@ -1,10 +1,12 @@
-{% extends 'post/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
 <div class="container">
     <h1>ホーム</h1>
 
     {% if user.is_authenticated %}
-        <p>ユーザー名: {{ user.username }} さん</p>
+        <p>こんにちは！
+            <img src = "{{ user.avator.url }}" style = "width:50px; height:auto">{{ user.username }}</img>
+        </p>
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit">ログアウト</button>

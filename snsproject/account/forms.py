@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from .models import Account
 from django.forms.models import ModelForm
 
@@ -37,3 +37,27 @@ class AccountEmailChangeForm(ModelForm):
     class Meta:
         model = Account
         fields = ('email', )
+    
+class AccountPasswordResetform(PasswordResetForm):
+    def __init__(self, * args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+    
+    class Meta :
+        model = Account
+
+class AccountSetPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+
+        for field in self.fields.values() :
+            field.widget.attrs['class'] = 'form-control'
+    
+    class Meta :
+        model = Account
+
+class AccountAvatorUploadForm(ModelForm):
+    class Meta:
+        model = Account
+        fields = ('avator', )

@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import AccountSignupForm, AccountLoginForm,PasswordChangeForm,AccountEmailChangeForm
+from .forms import AccountSignupForm, AccountLoginForm,PasswordChangeForm,AccountEmailChangeForm, AccountPasswordResetform, AccountSetPasswordForm,AccountAvatorUploadForm
 from .models import Account
 from django.core.signing import BadSignature, SignatureExpired, dumps, loads
 from django.core.mail import send_mail
@@ -75,3 +75,36 @@ class AccountEmailChangeCompleteView(LoginRequiredMixin, generic.TemplateView):
             request.user.email = new_email
             request.user.save()
             return super().get(request, **kwargs)
+
+class AccountPasswordResetView(auth_views.PasswordResetView):
+    subject_template_name = 'account/mail/password_reset_subject.txt'
+    email_template_name = 'account/mail/password_reset_message.txt'
+    form_class = AccountPasswordResetform
+    template_name = 'account/password_reset.html'
+    success_url = reverse_lazy('password_reset_done')
+
+class AccountPasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'account/password_reset_done.html'
+
+class AccountPasswordResetConfirm(auth_views.PasswordResetConfirmView):
+    form_class = AccountSetPasswordForm
+    template_name = 'account/password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+
+class AccountPasswordResetComplete(auth_views.PasswordResetCompleteView):
+    template_name = 'account/password_reset_complete.html'
+
+class AccountAvatorUploadView(LoginRequiredMixin, generic.FormView):
+    template_name = 'account/avator_upload_form.html'
+    form_class = AccountAvatorUploadForm
+
+    def form_valid(self, form):
+        user = self.request.user
+        avator = form.cleaned_data['avator']
+        account = Account.objects.get(username = user)
+        account.avator = avator
+        account.save()
+        return redirect('avator_upload_done')
+
+class AccountAvatorUploadDoneView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'account/avator_upload_done.html'
