@@ -1,0 +1,23 @@
+<h2>ルーム詳細</h2>
+<p>ルーム名:{{ room.name }}</p>
+<p>ルーム作成者{{room.posted_by.username}}</p>
+<p>ルーム作成日時:{{ room.created_at }}</p>
+
+<h2>メッセージ一覧</h2>
+{% for message in messages %}
+    <p>{{ message.posted_by }}: {{ message.content }}</p>
+{% endfor %}
+
+<h2>メッセージを送る</h2>
+{% if user.is_authenticated %}
+<form action = 'post'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type = 'submit'>送信</button>
+</form>
+{%else%}
+<a href = "{% url 'login' %}?next={%url 'room.detail' room.id %}">ログインしてメッセージを送る</a>
+{% endif %}
+<br>
+
+<a href = "{% url 'room.list' %}"> ルーム一覧</a>
