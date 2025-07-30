@@ -5,7 +5,9 @@ from django.views import generic
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AccountSignupForm, AccountLoginForm,PasswordChangeForm,AccountEmailChangeForm, AccountPasswordResetform, AccountSetPasswordForm,AccountAvatorUploadForm
-from .models import Account
+from .models import Account, Follow
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.signing import BadSignature, SignatureExpired, dumps, loads
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -108,3 +110,26 @@ class AccountAvatorUploadView(LoginRequiredMixin, generic.FormView):
 
 class AccountAvatorUploadDoneView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'account/avator_upload_done.html'
+
+@login_required
+def post_follow(request, pk):
+    if request.method == 'POST' :
+        follow_user = Account.objects.get(pk = pk)
+        if request.user == follow_user:
+            messages.error(request, '自分に対してはフォローできません')
+            return redirect(to = '/')
+        follow_user.follower_count += 1
+        follow_user.save()
+
+        request.user.following_count += 1
+        request.user.save()
+
+        follow = Follow()
+        follow.follow_id = request.user
+        follow.follower_id = follow_user
+        follow.save()
+
+        messages.success(request, 'ユーザーをフォローしました')
+    else:
+        messages.error(request, '正しい方法でフォローしてください')
+    return redirect(to ='/')

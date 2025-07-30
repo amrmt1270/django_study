@@ -16,5 +16,6 @@ urlpatterns = [
     path('password_reset/confirm/<uidb64>/<token>/', views.AccountPasswordResetConfirm.as_view(), name = 'password_reset_confirm'),
     path('password_reset/complete/', views.AccountPasswordResetComplete.as_view(), name = 'password_reset_complete'),
     path('avator/upload/', views.AccountAvatorUploadView.as_view(), name = 'avator_upload'),
-    path('avator/upload/done', views.AccountAvatorUploadView.as_view(), name = 'avator_upload_done')
+    path('avator/upload/done', views.AccountAvatorUploadView.as_view(), name = 'avator_upload_done'),
+    path('<int:pk>/follow/', views.post_follow, name = 'follow')
 ]

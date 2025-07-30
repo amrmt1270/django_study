@@ -1,0 +1,54 @@
+{% block content%}
+{% for item in object_list %}
+<div class="card mb-3">
+    <h5 class="card-title">{{ item.owner }}</h5>
+    <p class="card-text">{{ item.content }}</p>
+    {%if item.image %}
+        <img class = 'img-fluid' src = "{{ item.image.url }}" alt = ""/ >
+    {% endif %}
+    <a href = "{% url 'post_detail' item.pk %}" class = 'btn btn-primary'>詳細へ</a>
+    {% if item.visibility == 'PRIVATE' %}
+        🔒
+    {% endif %}
+    <p class="card-text text-end">{{ item.created_at }}</p>
+</div>
+    {% empty %}
+        <p>投稿はまだありません。</p>
+{% endfor %}
+
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if object_list.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ object_list.previous_page_number }}">前</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">前</span>
+            </li>
+        {% endif %}
+
+        {% for link_page in object_list.paginator.page_range %}
+            {% if link_page == object_list.number %}
+                <li class="page-item active">
+                    <span class="page-link">{{ link_page }}</span>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ link_page }}">{{ link_page }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if object_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ object_list.next_page_number }}">次</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">次</span>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}
