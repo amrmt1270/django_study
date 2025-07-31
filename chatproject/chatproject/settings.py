@@ -125,3 +125,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = 'account.Account'
 
 LOGIN_REIRECT_URL = '/'
+ASGI_APPLICATION = 'chatproject.asgi.application'
+
+CHANNEL_LAYERS ={
+    'default': {
+        'BACKEND':'chanels.layers.InMemoryChannelLayer'
+    }
+}
